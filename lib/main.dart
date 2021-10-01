@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:get_builder_state_management_getx/views/home.dart';
+import 'package:get_builder_state_management_getx/utils/export.dart';
 
 void main() {
   runApp(const MyApp());
