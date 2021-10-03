@@ -1,5 +1,4 @@
-import 'package:get/get.dart';
-import 'package:get_builder_state_management_getx/models/product_model.dart';
+import 'package:get_builder_state_management_getx/utils/export.dart';
 
 class ProductController extends GetxController {
   List<Product> products = [];
