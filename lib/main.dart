@@ -14,8 +14,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: const TextTheme(
+          bodyText1: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+          bodyText2: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }
