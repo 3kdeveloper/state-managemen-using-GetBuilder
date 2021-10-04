@@ -37,7 +37,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     onPressed: () {
                       favoriteBox.deleteAt(index);
                     },
-                    icon: const Icon(Icons.close),
+                    icon: const Icon(Icons.favorite, color: Colors.red),
                   ),
                 ),
               );

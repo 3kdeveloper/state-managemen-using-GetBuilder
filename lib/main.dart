@@ -1,9 +1,14 @@
 import 'package:get_builder_state_management_getx/utils/export.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 Future<void> main() async {
-  await Hive.initFlutter();
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
   Hive.registerAdapter(FavoriteModelAdapter());
+  Hive.registerAdapter(CartModelAdapter());
   await Hive.openBox<FavoriteModel>('favourite');
+  await Hive.openBox<CartModel>('cart');
   runApp(const MyApp());
 }
 
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

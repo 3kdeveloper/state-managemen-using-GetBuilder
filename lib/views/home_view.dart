@@ -1,22 +1,22 @@
 import 'package:get_builder_state_management_getx/utils/export.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final productController = Get.lazyPut(() => ProductController());
-  final productCntrolr = Get.find<ProductController>();
+  final favoriteController = Get.lazyPut(() => FavoriteController());
+  final cartController = Get.lazyPut(() => CartController());
 
-  void addToFavorite(int index) {
-    final favorite = FavoriteModel(
-      productTitle: productCntrolr.products[index].productName,
-      productImage: productCntrolr.products[index].productImage!,
-      productPrice: productCntrolr.products[index].price!,
-    );
-    Hive.box<FavoriteModel>('favourite')
-        .put(productCntrolr.products[index].id, favorite);
-  }
-
-  void deleteFromFavorite(int index) {
-    Hive.box<FavoriteModel>('favourite').deleteAt(index);
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    Hive.close();
+    super.dispose();
   }
 
   @override
@@ -30,18 +30,16 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () => Get.to(const FavoriteScreen()),
                 icon: const Icon(Icons.favorite, color: Colors.red)),
             IconButton(
-              onPressed: () {},
+              onPressed: () => Get.to(const CartScreen()),
               icon: const Icon(Icons.shopping_cart),
             ),
           ],
         ),
         body: GetBuilder<ProductController>(builder: (controller) {
           return GridView.builder(
-            padding: const EdgeInsets.only(
-              left: 5.0,
-              right: 5.0,
-              top: 10.0,
-              bottom: 10.0,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5.0,
+              vertical: 10.0,
             ),
             itemCount: controller.products.length,
             itemBuilder: (context, index) {
@@ -76,49 +74,17 @@ class HomeScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                         SizedBox(height: constrains.maxHeight * 0.01),
-                        ValueListenableBuilder(
-                            valueListenable:
-                                Hive.box<FavoriteModel>('favourite')
-                                    .listenable(),
-                            builder: (context, box, _) {
-                              final favoriteBox =
-                                  Hive.box<FavoriteModel>('favourite');
-                              return Row(
-                                children: [
-                                  Text(
-                                    '\$ ${controller.products[index].price.toString()}',
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                  const Spacer(),
-                                  IconButton(
-                                    onPressed: () {
-                                      // deleteFromFavorite(index);
-
-                                      addToFavorite(index);
-                                    },
-                                    icon: Icon(
-                                      favoriteBox.containsKey(
-                                              productCntrolr.products[index].id)
-                                          ? Icons.favorite
-                                          : Icons.favorite_outline,
-                                      color: favoriteBox.containsKey(
-                                              productCntrolr.products[index].id)
-                                          ? Colors.red
-                                          : Colors.grey,
-                                    ),
-                                  ),
-                                  // IconButton(
-                                  //   onPressed: () {},
-                                  //   // icon: const Icon(
-                                  //   //   box.keyAt(index) != null
-                                  //   //       ? Icons.shopping_cart_outlined
-                                  //   //       : Icons.shopping_cart,
-                                  //   // ),
-                                  // ),
-                                ],
-                              );
-                            }),
+                        Row(
+                          children: [
+                            Text(
+                              '\$ ${controller.products[index].price.toString()}',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            const Spacer(),
+                            buildFavoriteButton(index),
+                            buildCartButton(index),
+                          ],
+                        )
                       ],
                     );
                   },
