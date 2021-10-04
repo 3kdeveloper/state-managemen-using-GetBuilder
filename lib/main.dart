@@ -1,6 +1,9 @@
 import 'package:get_builder_state_management_getx/utils/export.dart';
 
-void main() {
+Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(FavoriteModelAdapter());
+  await Hive.openBox<FavoriteModel>('favourite');
   runApp(const MyApp());
 }
 
@@ -9,11 +12,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'State Management Using GetBuilder',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
           bodyText1: TextStyle(
             fontSize: 20,
